@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "475644482982",
+    "project_id": "my-cloud-firestore-flutter-app",
+    "storage_bucket": "my-cloud-firestore-flutter-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475644482982:android:9fff526ad5571f8ceb2b67",
+        "android_client_info": {
+          "package_name": "com.example.cp213_futurebuilder_example02"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ0dh8CHlDX27ECUfhT7Dhi2mDvK_yTdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475644482982:android:c24155e3400e4cf2eb2b67",
+        "android_client_info": {
+          "package_name": "com.example.cp_213_sqflife_thunwarat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ0dh8CHlDX27ECUfhT7Dhi2mDvK_yTdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475644482982:android:25eeea2b6414b35eeb2b67",
+        "android_client_info": {
+          "package_name": "com.example.my_firebase_cloud_store"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ0dh8CHlDX27ECUfhT7Dhi2mDvK_yTdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
