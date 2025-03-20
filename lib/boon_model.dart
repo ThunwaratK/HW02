@@ -1,11 +1,11 @@
 class BoonModel {
   int? id;
-  late String title;
-  late String? desc;
-  late String eventDate;
-  late String startHour;
-  late String startMinute;
-  late String location;
+  String title;
+  String? desc;
+  String eventDate;
+  String startHour;
+  String startMinute;
+  String location;
 
   BoonModel({
     this.id,
@@ -17,19 +17,10 @@ class BoonModel {
     required this.location,
   });
 
-  BoonModel.fromMap(Map<String, dynamic> data) {
-    id = data['id'];
-    title = data['title'];
-    desc = data['desc'];
-    eventDate = data['eventDate'];
-    startHour = data['startHour'];
-    startMinute = data['startMinute'];
-    location = data['location'];
-  }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'id': id, 
       'title': title,
       'desc': desc,
       'eventDate': eventDate,
@@ -38,6 +29,15 @@ class BoonModel {
       'location': location,
     };
   }
+
+  BoonModel.fromMap(Map<String, dynamic> data)
+      : id = data['id'],
+        title = data['title'],
+        desc = data['desc'],
+        eventDate = data['eventDate'],
+        startHour = data['startHour'],
+        startMinute = data['startMinute'],
+        location = data['location'];
 
   @override
   String toString() {

@@ -1,8 +1,8 @@
-import 'package:cp_213_sqflife_thunwarat/boon_model.dart';
-import 'package:cp_213_sqflife_thunwarat/sqflite_database.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'boon_form_screen.dart';
+import 'sqlite.dart';
+import 'boon_model.dart';
+import 'ViewBoonScreen.dart';
 
 class BoonListViewScreen extends StatefulWidget {
   const BoonListViewScreen({super.key});
@@ -12,7 +12,25 @@ class BoonListViewScreen extends StatefulWidget {
 }
 
 class _BoonListViewScreenState extends State<BoonListViewScreen> {
-  final SqfliteDatabase _sqfliteDatabase = SqfliteDatabase();
+  List<BoonModel> _boons = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBoons();
+  }
+
+  Future<void> _loadBoons() async {
+    final boons = await Sqlitebase.instance.getBoons();
+    setState(() {
+      _boons = boons;
+    });
+  }
+
+  Future<void> _deleteBoon(int id) async {
+    await Sqlitebase.instance.deleteBoon(id);
+    _loadBoons();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +50,9 @@ class _BoonListViewScreenState extends State<BoonListViewScreen> {
                 context,
                 MaterialPageRoute(builder: (context) => const BoonFormScreen()),
               );
-              if (result == true) {
-                setState(() {});
+
+              if (result != null) {
+                _loadBoons();
               }
             },
             icon: const Icon(Icons.add),
@@ -42,67 +61,57 @@ class _BoonListViewScreenState extends State<BoonListViewScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: StreamBuilder<List<BoonModel>>(
-          stream: _sqfliteDatabase.getBoonListStream(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('No data available'));
-            }
-
-            final boonList = snapshot.data!;
-
-            return ListView.separated(
-              itemBuilder: (context, index) {
-                final boon = boonList[index];
-                return Card(
-                  color: Colors.grey[200],
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.purple[200],
-                      child: const Icon(Icons.place),
-                    ),
-                    title: Text(
-                      boon.title,
-                      style: GoogleFonts.openSans(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+        child: _boons.isEmpty
+            ? const Center(child: Text('No data available'))
+            : ListView.builder(
+                itemCount: _boons.length,
+                itemBuilder: (context, index) {
+                  final boon = _boons[index];
+                  return Card(
+                    child: ListTile(
+                      title: Text(boon.title),
+                      subtitle: Text(boon.desc ?? 'No description'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.visibility, color: Colors.blue),
+                            onPressed: () {
+                              
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ViewBoonScreen(boon: boon),
+                                ),
+                              );
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.orange),
+                            onPressed: () async {
+                              
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BoonFormScreen(boon: boon),
+                                ),
+                              );
+                              
+                              if (result != null) {
+                                _loadBoons();
+                              }
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () => _deleteBoon(boon.id!),
+                          ),
+                        ],
                       ),
                     ),
-                    subtitle: Text(
-                      '${boon.location} - ${boon.eventDate}',
-                      style: GoogleFonts.openSans(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            // Navigate to edit screen (not implemented here)
-                          },
-                          icon: const Icon(Icons.edit, color: Colors.orange),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            _sqfliteDatabase.deleteBoon(boon.id!);
-                          },
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) => const Divider(),
-              itemCount: boonList.length,
-            );
-          },
-        ),
+                  );
+                },
+              ),
       ),
     );
   }
